@@ -27,3 +27,67 @@ function App() {
 }
 
 export default App;
+yield{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::[YOUR AWS ACCOUNT ID]:oidc-provider/oidc.vercel.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "oidc.vercel.com:aud": [
+            "https://vercel.com/[OLD_TEAM_SLUG]",
+            "https://vercel.com/[NEW_TEAM_SLUG]"
+          ],
+          "oidc.vercel.com:sub": [
+            "owner:[OLD_TEAM_SLUG]:project:[OLD_PROJECT_NAME]:environment:production",
+            "owner:[NEW_TEAM_SLUG]:project:[NEW_PROJECT_NAME]:environment:production"
+          ]
+        }
+      }
+    }
+  ]
+j}{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "OldTeamName",
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::[YOUR AWS ACCOUNT ID]:oidc-provider/oidc.vercel.com/[OLD_TEAM_SLUG]"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "oidc.vercel.com/[OLD_TEAM_SLUG]:aud": [
+            "https://vercel.com/[OLD_TEAM_SLUG]"
+          ],
+          "oidc.vercel.com/[OLD_TEAM_SLUG]:sub": [
+            "owner:[OLD_TEAM_SLUG]:project:[OLD_PROJECT_NAME]:environment:production"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "NewTeamName",
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::[YOUR AWS ACCOUNT ID]:oidc-provider/oidc.vercel.com/[NEW_TEAM_SLUG]"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "oidc.vercel.com/[NEW_TEAM_SLUG]:aud": [
+            "https://vercel.com/[NEW_TEAM_SLUG]"
+          ],
+          "oidc.vercel.com/[NEW_TEAM_SLUG]:sub": [
+            "owner:[NEW_TEAM_SLUG]:project:[NEW_PROJECT_NAME]:environment:production"
+          ]
+        }
+      }
+    }
+  ]
+}
